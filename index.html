@@ -196,7 +196,7 @@
             uploadSection.classList.remove('hidden');
         }
 
-        function submitForm(type) {
+        async function submitForm(type) {
             const formData = new FormData();
             if (type === 'residence-out') {
                 formData.append('Nome', document.getElementById('name').value);
@@ -209,22 +209,23 @@
                 formData.append('Email do titular da fatura', document.getElementById('email-holder').value);
                 formData.append('Fatura', document.getElementById('invoice').files[0]);
             }
-            
-            fetch('https://script.google.com/macros/s/AKfycbw8P0r8hes161ZKWVUrFuo2tDuW9nIv9zHvP0uV0fPcktst0wLmNtLN3LQgz5HI64IB/exec', {
-                method: 'POST',
-                body: formData
-            }).then(response => response.json())
-            .then(data => {
-                if (data.result === 'success') {
+
+            try {
+                const response = await fetch('https://script.google.com/macros/s/AKfycbw8P0r8hes161ZKWVUrFuo2tDuW9nIv9zHvP0uV0fPcktst0wLmNtLN3LQgz5HI64IB/exec', {
+                    method: 'POST',
+                    body: formData
+                });
+                const result = await response.json();
+                if (result.result === 'success') {
                     document.getElementById('energy-form').classList.add('hidden');
                     thanksPage.classList.remove('hidden');
                 } else {
                     alert('Ocorreu um erro ao enviar sua solicitação. Tente novamente.');
                 }
-            }).catch(error => {
+            } catch (error) {
                 console.error('Error:', error);
                 alert('Ocorreu um erro ao enviar sua solicitação. Tente novamente.');
-            });
+            }
         }
 
         function resetForm() {
