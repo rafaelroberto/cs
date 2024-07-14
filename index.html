@@ -202,7 +202,7 @@
                 formData.append('Fatura', document.getElementById('invoice').files[0]);
             }
             
-            fetch('YOUR_GOOGLE_SHEETS_INTEGRATION_URL', {
+            fetch('https://script.google.com/macros/s/AKfycby79UezSCEbCkvLpSGRnHcViYH4_MIxdUK_D9c3P1Cu_IQPIV8JD9NLyVa2xN2XghDt9g/exec', {
                 method: 'POST',
                 body: formData
             }).then(response => {
