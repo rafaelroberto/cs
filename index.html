@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f4f9;
+            background-color: #f4f9ff;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -73,7 +73,7 @@
 </head>
 <body>
     <div class="container">
-        <img src="https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcQOOA2q2y5Jjb0Vldd_7GK7CYwcjtpQOjppsQ&s" alt="Grupo BC Energia" class="logo">
+        <img src="logo.png" alt="Grupo BC Energia" class="logo">
         <h1>Economia de Energia</h1>
         <form id="energy-form">
             <div class="form-group">
@@ -194,11 +194,12 @@
                 formData.append('Fatura', document.getElementById('invoice').files[0]);
             }
             
-            fetch('https://script.google.com/macros/s/AKfycbw8P0r8hes161ZKWVUrFuo2tDuW9nIv9zHvP0uV0fPcktst0wLmNtLN3LQgz5HI64IB/exec', {
+            fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
                 method: 'POST',
                 body: formData
-            }).then(response => {
-                if (response.ok) {
+            }).then(response => response.json())
+            .then(data => {
+                if (data.result === 'success') {
                     document.getElementById('energy-form').classList.add('hidden');
                     thanksPage.classList.remove('hidden');
                 } else {
