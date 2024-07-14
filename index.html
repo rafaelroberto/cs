@@ -20,13 +20,14 @@
             border-radius: 10px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
             width: 400px;
+            text-align: center;
         }
         h1 {
             color: #333;
-            text-align: center;
         }
         .form-group {
             margin-bottom: 15px;
+            text-align: left;
         }
         label {
             display: block;
@@ -59,10 +60,19 @@
         .thanks-page {
             text-align: center;
         }
+        .logo {
+            margin-bottom: 20px;
+        }
+        .message {
+            color: #d9534f;
+            font-weight: bold;
+            margin-bottom: 20px;
+        }
     </style>
 </head>
 <body>
     <div class="container">
+        <img src="logo.png" alt="Grupo BC Energia" class="logo">
         <h1>Economia de Energia</h1>
         <form id="energy-form">
             <!-- Seção 1 -->
@@ -84,41 +94,42 @@
                         <option value="GO">GO</option>
                         <option value="DF">DF</option>
                         <option value="MT">MT</option>
-                        <option value="outro">Outro</option>
+                        <option value="outro">Outro Estado</option>
                     </select>
                 </div>
                 <div id="contact-info" class="hidden">
+                    <p class="message">No momento não estamos atendendo o seu Estado. Mas, logo chegaremos. Preencha os dados e aguarde o nosso contato.</p>
                     <div class="form-group">
                         <label for="name">Nome</label>
-                        <input type="text" id="name">
+                        <input type="text" id="name" required>
                     </div>
                     <div class="form-group">
                         <label for="email">Email</label>
-                        <input type="email" id="email">
+                        <input type="email" id="email" required>
                     </div>
                     <div class="form-group">
                         <label for="phone">Telefone</label>
-                        <input type="text" id="phone">
+                        <input type="text" id="phone" required>
                     </div>
-                    <button type="button" onclick="submitForm('residence-out')">Enviar</button>
+                    <button type="button" onclick="submitForm('residence-out')">Cadastrar</button>
                 </div>
                 
                 <div id="resident-details" class="hidden">
                     <div class="form-group">
                         <label for="holder-name">Nome do titular da fatura</label>
-                        <input type="text" id="holder-name">
+                        <input type="text" id="holder-name" required>
                     </div>
                     <div class="form-group">
                         <label for="cpf">CPF do titular da fatura</label>
-                        <input type="text" id="cpf">
+                        <input type="text" id="cpf" required>
                     </div>
                     <div class="form-group">
                         <label for="phone-holder">Telefone</label>
-                        <input type="text" id="phone-holder">
+                        <input type="text" id="phone-holder" required>
                     </div>
                     <div class="form-group">
                         <label for="email-holder">Email</label>
-                        <input type="email" id="email-holder">
+                        <input type="email" id="email-holder" required>
                     </div>
                     <button type="button" onclick="showFileUpload()">Próxima Etapa</button>
                 </div>
@@ -131,7 +142,7 @@
                     <input type="file" id="invoice" required>
                     <p class="disclaimer">* Não pode ser fatura rasurada, escura...</p>
                 </div>
-                <button type="button" onclick="submitForm('invoice')">Enviar</button>
+                <button type="button" onclick="submitForm('invoice')">Cadastrar</button>
             </div>
         </form>
 
@@ -178,29 +189,33 @@
         }
 
         function submitForm(type) {
-            const email = 'rafael.roberto@grupobcenergia.com.br';
-            let mailContent = '';
-
+            const formData = new FormData();
             if (type === 'residence-out') {
-                mailContent = `
-                    Nome: ${document.getElementById('name').value}
-                    Email: ${document.getElementById('email').value}
-                    Telefone: ${document.getElementById('phone').value}
-                `;
+                formData.append('Nome', document.getElementById('name').value);
+                formData.append('Email', document.getElementById('email').value);
+                formData.append('Telefone', document.getElementById('phone').value);
             } else if (type === 'invoice') {
-                mailContent = `
-                    Nome do titular da fatura: ${document.getElementById('holder-name').value}
-                    CPF do titular da fatura: ${document.getElementById('cpf').value}
-                    Telefone: ${document.getElementById('phone-holder').value}
-                    Email: ${document.getElementById('email-holder').value}
-                `;
+                formData.append('Nome do titular da fatura', document.getElementById('holder-name').value);
+                formData.append('CPF do titular da fatura', document.getElementById('cpf').value);
+                formData.append('Telefone', document.getElementById('phone-holder').value);
+                formData.append('Email', document.getElementById('email-holder').value);
+                formData.append('Fatura', document.getElementById('invoice').files[0]);
             }
-
-            const mailtoLink = `mailto:${email}?subject=Formulário de Economia de Energia&body=${encodeURIComponent(mailContent)}`;
-            window.location.href = mailtoLink;
-
-            document.getElementById('energy-form').classList.add('hidden');
-            thanksPage.classList.remove('hidden');
+            
+            fetch('YOUR_GOOGLE_SHEETS_INTEGRATION_URL', {
+                method: 'POST',
+                body: formData
+            }).then(response => {
+                if (response.ok) {
+                    document.getElementById('energy-form').classList.add('hidden');
+                    thanksPage.classList.remove('hidden');
+                } else {
+                    alert('Ocorreu um erro ao enviar sua solicitação. Tente novamente.');
+                }
+            }).catch(error => {
+                console.error('Error:', error);
+                alert('Ocorreu um erro ao enviar sua solicitação. Tente novamente.');
+            });
         }
 
         function resetForm() {
