@@ -1,3 +1,4 @@
+<!DOCTYPE html>
 <html>
 <head>
   <title>Customer Success Form</title>
@@ -5,24 +6,70 @@
 <body>
   <h1>Customer Success Form</h1>
   <form id="csForm">
-    <label for="name">Name:</label><br>
-    <input type="text" id="name" name="name"><br>
+    <!-- Seção de Recepção do Cliente -->
+    <h2>Recepção do Cliente</h2>
+    <label for="responsible">Nome do Responsável:</label><br>
+    <input type="text" id="responsible" name="responsible" required><br>
     <label for="email">Email:</label><br>
-    <input type="email" id="email" name="email"><br>
-    <label for="product">Product:</label><br>
-    <input type="text" id="product" name="product"><br>
-    <label for="comments">Comments:</label><br>
-    <textarea id="comments" name="comments"></textarea><br>
+    <input type="email" id="email" name="email" required><br>
+
+    <!-- Seção de Classificação do Produto -->
+    <h2>Classificação do Produto</h2>
+    <label for="product">Produto:</label><br>
+    <select id="product" name="product" required>
+      <option value="GD">Geração Distribuída (GD)</option>
+      <option value="Varejo">Varejo (Mercado Livre)</option>
+    </select><br>
+
+    <!-- Seção de Sucesso do Cliente -->
+    <h2>Fase de Sucesso do Cliente</h2>
+    <!-- Perguntas para GD -->
+    <div id="gdQuestions" style="display:none;">
+      <h3>Produto GD (Geração Distribuída)</h3>
+      <label for="confirmation">Você recebeu a confirmação da adesão ao GD?</label><br>
+      <input type="text" id="confirmation" name="confirmation"><br>
+      <label for="discountInfo">Está ciente de que o desconto será aplicado após 90 dias?</label><br>
+      <input type="text" id="discountInfo" name="discountInfo"><br>
+      <label for="feedback">Você enfrentou algum problema durante o processo de adesão?</label><br>
+      <input type="text" id="feedback" name="feedback"><br>
+    </div>
+    
+    <!-- Perguntas para Varejo -->
+    <div id="retailQuestions" style="display:none;">
+      <h3>Produto Varejo (Mercado Livre)</h3>
+      <label for="improvement">Há algum aspecto do serviço que você gostaria de melhorar ou ajustar?</label><br>
+      <input type="text" id="improvement" name="improvement"><br>
+      <label for="knowledge">Você está ciente de todas as opções e ofertas disponíveis no mercado livre?</label><br>
+      <input type="text" id="knowledge" name="knowledge"><br>
+    </div>
+
     <input type="button" value="Submit" onclick="submitForm()">
   </form>
+
   <script>
+    document.getElementById('product').addEventListener('change', function () {
+      var gdQuestions = document.getElementById('gdQuestions');
+      var retailQuestions = document.getElementById('retailQuestions');
+      if (this.value === 'GD') {
+        gdQuestions.style.display = 'block';
+        retailQuestions.style.display = 'none';
+      } else {
+        gdQuestions.style.display = 'none';
+        retailQuestions.style.display = 'block';
+      }
+    });
+
     function submitForm() {
       const url = 'YOUR_WEB_APP_URL'; // Coloque aqui a URL do seu Web App
       const formData = {
-        name: document.getElementById('name').value,
+        responsible: document.getElementById('responsible').value,
         email: document.getElementById('email').value,
         product: document.getElementById('product').value,
-        comments: document.getElementById('comments').value,
+        confirmation: document.getElementById('confirmation').value || '',
+        discountInfo: document.getElementById('discountInfo').value || '',
+        feedback: document.getElementById('feedback').value || '',
+        improvement: document.getElementById('improvement').value || '',
+        knowledge: document.getElementById('knowledge').value || '',
       };
 
       fetch(url, {
@@ -33,8 +80,8 @@
         },
       })
       .then(response => response.text())
-      .then(data => alert('Form submitted successfully'))
-      .catch(error => alert('Error: ' + error));
+      .then(data => alert('Formulário enviado com sucesso'))
+      .catch(error => alert('Erro: ' + error));
     }
   </script>
 </body>
