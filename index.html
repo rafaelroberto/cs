@@ -33,12 +33,14 @@
       <div class="mb-3">
         <label for="email" class="form-label">Email:</label>
         <input type="email" class="form-control" id="email" name="email" required>
+        <div class="invalid-feedback">Por favor, insira um email válido.</div>
       </div>
 
       <!-- Seção de Classificação do Produto -->
       <div class="mb-3">
         <label for="product" class="form-label">Produto:</label>
         <select class="form-select" id="product" name="product" required>
+          <option value="" selected>Selecione...</option>
           <option value="GD">Geração Distribuída (GD)</option>
           <option value="Varejo">Varejo (Mercado Livre)</option>
         </select>
@@ -73,7 +75,7 @@
         </div>
       </div>
 
-      <button type="button" class="btn btn-primary" onclick="submitForm()">Submit</button>
+      <button type="button" class="btn btn-primary" onclick="submitForm()">Gerar Relatório</button>
     </form>
   </div>
 
@@ -85,13 +87,30 @@
       if (this.value === 'GD') {
         gdQuestions.style.display = 'block';
         retailQuestions.style.display = 'none';
-      } else {
+      } else if (this.value === 'Varejo') {
         gdQuestions.style.display = 'none';
         retailQuestions.style.display = 'block';
+      } else {
+        gdQuestions.style.display = 'none';
+        retailQuestions.style.display = 'none';
+      }
+    });
+
+    document.getElementById('email').addEventListener('input', function () {
+      var emailField = document.getElementById('email');
+      if (emailField.validity.typeMismatch) {
+        emailField.classList.add('is-invalid');
+      } else {
+        emailField.classList.remove('is-invalid');
       }
     });
 
     function submitForm() {
+      if (!document.getElementById('csForm').checkValidity()) {
+        document.getElementById('csForm').reportValidity();
+        return;
+      }
+
       const formData = {
         responsible: document.getElementById('responsible').value,
         email: document.getElementById('email').value,
@@ -115,7 +134,7 @@
         doc.text(`Confirmação: ${formData.confirmation}`, 20, 60);
         doc.text(`Desconto: ${formData.discountInfo}`, 20, 70);
         doc.text(`Feedback: ${formData.feedback}`, 20, 80);
-      } else {
+      } else if (formData.product === 'Varejo') {
         doc.text(`Melhorias: ${formData.improvement}`, 20, 60);
         doc.text(`Conhecimento: ${formData.knowledge}`, 20, 70);
       }
