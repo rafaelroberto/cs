@@ -7,7 +7,7 @@
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f9ff;
+            background-color: #f4f4f9;
             display: flex;
             justify-content: center;
             align-items: center;
@@ -69,11 +69,18 @@
             font-weight: bold;
             margin-bottom: 20px;
         }
+        .btn-group {
+            display: flex;
+            justify-content: space-between;
+        }
+        .btn-group button {
+            width: 48%;
+        }
     </style>
 </head>
 <body>
     <div class="container">
-        <img src="logo.png" alt="Grupo BC Energia" class="logo">
+        <img src="https://meudescontonaconta.com.br/images/logo-grupo-bc-energia.png" alt="Grupo BC Energia" class="logo">
         <h1>Economia de Energia</h1>
         <form id="energy-form">
             <div class="form-group">
@@ -109,7 +116,10 @@
                         <label for="phone">Telefone</label>
                         <input type="text" id="phone" required>
                     </div>
-                    <button type="button" onclick="submitForm('residence-out')">Cadastrar</button>
+                    <div class="btn-group">
+                        <button type="button" onclick="resetForm()">Voltar</button>
+                        <button type="button" onclick="submitForm('residence-out')">Cadastrar</button>
+                    </div>
                 </div>
                 <div id="resident-details" class="hidden">
                     <div class="form-group">
@@ -128,7 +138,10 @@
                         <label for="email-holder">Email</label>
                         <input type="email" id="email-holder" required>
                     </div>
-                    <button type="button" onclick="showFileUpload()">Próxima Etapa</button>
+                    <div class="btn-group">
+                        <button type="button" onclick="resetForm()">Voltar</button>
+                        <button type="button" onclick="showFileUpload()">Próxima Etapa</button>
+                    </div>
                 </div>
             </div>
             <div id="upload-section" class="hidden">
@@ -137,7 +150,10 @@
                     <input type="file" id="invoice" required>
                     <p class="disclaimer">* Não pode ser fatura rasurada, escura...</p>
                 </div>
-                <button type="button" onclick="submitForm('invoice')">Cadastrar</button>
+                <div class="btn-group">
+                    <button type="button" onclick="resetForm()">Voltar</button>
+                    <button type="button" onclick="submitForm('invoice')">Cadastrar</button>
+                </div>
             </div>
         </form>
         <div id="thanks-page" class="hidden">
@@ -194,7 +210,7 @@
                 formData.append('Fatura', document.getElementById('invoice').files[0]);
             }
             
-            fetch('https://script.google.com/macros/s/YOUR_SCRIPT_ID/exec', {
+            fetch('https://script.google.com/macros/s/AKfycbw8P0r8hes161ZKWVUrFuo2tDuW9nIv9zHvP0uV0fPcktst0wLmNtLN3LQgz5HI64IB/exec', {
                 method: 'POST',
                 body: formData
             }).then(response => response.json())
