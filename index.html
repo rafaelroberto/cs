@@ -62,7 +62,7 @@
         }
         .logo {
             margin-bottom: 20px;
-            width: 100px; /* Ajuste o tamanho da logo conforme necessário */
+            width: 100px;
         }
         .message {
             color: #d9534f;
@@ -73,10 +73,9 @@
 </head>
 <body>
     <div class="container">
-        <img src="https://grupobcenergia.com.br/wp-content/themes/grupo-bc-energia/images/bc_energia_logo.png" alt="Grupo BC Energia" class="logo">
+        <img src="logo.png" alt="Grupo BC Energia" class="logo">
         <h1>Economia de Energia</h1>
         <form id="energy-form">
-            <!-- Seção 1 -->
             <div class="form-group">
                 <label for="economy-choice">Você quer economizar energia da sua residência ou empresa?</label>
                 <select id="economy-choice" required>
@@ -85,8 +84,6 @@
                     <option value="empresa">Empresa</option>
                 </select>
             </div>
-            
-            <!-- Seção Residência -->
             <div id="residence-section" class="hidden">
                 <div class="form-group">
                     <label for="residence-location">Onde fica a sua residência?</label>
@@ -114,7 +111,6 @@
                     </div>
                     <button type="button" onclick="submitForm('residence-out')">Cadastrar</button>
                 </div>
-                
                 <div id="resident-details" class="hidden">
                     <div class="form-group">
                         <label for="holder-name">Nome do titular da fatura</label>
@@ -135,8 +131,6 @@
                     <button type="button" onclick="showFileUpload()">Próxima Etapa</button>
                 </div>
             </div>
-            
-            <!-- Seção Upload de Fatura -->
             <div id="upload-section" class="hidden">
                 <div class="form-group">
                     <label for="invoice">Anexe a última fatura de energia</label>
@@ -146,8 +140,6 @@
                 <button type="button" onclick="submitForm('invoice')">Cadastrar</button>
             </div>
         </form>
-
-        <!-- Página de Agradecimento -->
         <div id="thanks-page" class="hidden">
             <h1>Obrigado!</h1>
             <p>Sua solicitação foi enviada com sucesso.</p>
@@ -155,7 +147,6 @@
             <button onclick="window.location.href='https://www.grupobcenergia.com.br'">Acessar o site do Grupo BC Energia</button>
         </div>
     </div>
-
     <script>
         const economyChoice = document.getElementById('economy-choice');
         const residenceSection = document.getElementById('residence-section');
@@ -197,9 +188,9 @@
                 formData.append('Telefone', document.getElementById('phone').value);
             } else if (type === 'invoice') {
                 formData.append('Nome do titular da fatura', document.getElementById('holder-name').value);
-                formData.append('CPF do titular da fatura', document.getElementById('cpf').value);
-                formData.append('Telefone', document.getElementById('phone-holder').value);
-                formData.append('Email', document.getElementById('email-holder').value);
+                formData.append('CPF', document.getElementById('cpf').value);
+                formData.append('Telefone do titular da fatura', document.getElementById('phone-holder').value);
+                formData.append('Email do titular da fatura', document.getElementById('email-holder').value);
                 formData.append('Fatura', document.getElementById('invoice').files[0]);
             }
             
